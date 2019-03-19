@@ -86,7 +86,7 @@ public class SeamCarver {
 				if (c != 0 && dynamic[c-1][r-1] < minEnergy) { minEnergy = dynamic[c-1][r-1]; }
 				if (c != picture.width() - 1 && dynamic[c+1][r-1] < minEnergy) { minEnergy = dynamic[c+1][r-1]; }
 				dynamic[c][r] = minEnergy + energy(c, r);
-				if (leastEnergyCol == -1 || (r == picture.height()-1 && dynamic[c][r] < dynamic[leastEnergyCol][r])) {
+				if (r == picture.height()-1 && (leastEnergyCol == -1 || (dynamic[c][r] < dynamic[leastEnergyCol][r]))) {
 					leastEnergyCol = c;
 				}
 			}
@@ -135,8 +135,9 @@ public class SeamCarver {
 	}
 	
 	public static void main(String[] args) {
-		SeamCarver sc = new SeamCarver(new Picture("/Users/95024341/eclipse-workspace/SeamCarving/bin/black400x400.jpg"));
+		SeamCarver sc = new SeamCarver(new Picture("messy2.png"));
 		int[] vert = sc.findVerticalSeam();
+		sc.removeVerticalSeam(vert);
 		System.out.println(Arrays.toString(vert));
 	}
 }
