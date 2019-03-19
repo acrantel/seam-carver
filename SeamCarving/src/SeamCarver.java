@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class SeamCarver {
 	private Picture picture;
@@ -98,13 +99,16 @@ public class SeamCarver {
 		for (int r = picture.height()-2; r >= 0; r--) {
 			int minEnergyCol = prevCol; // the row with least energy in the col that is at most a distance of 2 to curRow
 			if (prevCol != 0 && dynamic[prevCol-1][r] < dynamic[minEnergyCol][r]) { minEnergyCol = prevCol-1; }
-			if (prevCol != picture.height()-1 && dynamic[prevCol+1][r] < dynamic[minEnergyCol][r]) { minEnergyCol = prevCol+1; } 
+			if (prevCol != picture.width()-1 && dynamic[prevCol+1][r] < dynamic[minEnergyCol][r]) { minEnergyCol = prevCol+1; } 
 			verticalSeam[r] = minEnergyCol;
 			prevCol = minEnergyCol;
 		}
 		return verticalSeam;
 	}
 	public void removeHorizontalSeam(int[] seam) {
+		if (picture.height() == 1) {
+			throw new IllegalArgumentException("Can't remove horizontal seam if height of picture is 1 because height cannot become <= 0");
+		}
 		Picture newPic = new Picture(picture.width(), picture.height()-1);
 		for (int c = 0; c < seam.length; c++) { // go through all the columns, removing the one pixel
 			int newR = 0;
@@ -120,6 +124,9 @@ public class SeamCarver {
 		this.picture = newPic;
 	}
 	public void removeVerticalSeam(int[] seam) {
+		if (picture.width() == 1) {
+			throw new IllegalArgumentException("Can't remove vertical seam if width of picture is 1 because width cannot become <= 0");
+		}
 		Picture newPic = new Picture(picture.width()-1, picture.height());
 		for (int r = 0; r < seam.length; r++) {
 			int newC = 0;
@@ -132,12 +139,39 @@ public class SeamCarver {
 				prevC++;
 			}
 		}
+		this.picture = newPic;
 	}
 	
 	public static void main(String[] args) {
-		SeamCarver sc = new SeamCarver(new Picture("messy2.png"));
-		int[] vert = sc.findVerticalSeam();
-		sc.removeVerticalSeam(vert);
-		System.out.println(Arrays.toString(vert));
+		Scanner in = new Scanner(System.in);
+		SeamCarver sc = null;
+		while (true) {
+			System.out.println("Load picture: ");
+			String path = in.nextLine();
+			try {
+				sc = new SeamCarver(new Picture(path)); 
+				break;
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				System.out.println("Unable to load picture, try again");
+			}
+		}
+		System.out.println("Current size of picture(WxH): " + sc.picture.width() + "x" + sc.picture.height());
+		System.out.print("Enter new width of picture: ");
+		int width = Integer.parseInt(in.nextLine());// no error checking here add later
+		System.out.print("Enter new height of picture: ");
+		int height = Integer.parseInt(in.nextLine());
+		while (sc.picture.width() > width) {
+			int[] vert = sc.findVerticalSeam();
+			sc.removeVerticalSeam(vert);
+			System.out.println(Arrays.toString(vert));
+		}
+		while (sc.picture.height() > height) {
+			int[] horiz = sc.findHorizontalSeam();
+			sc.removeHorizontalSeam(horiz);
+			System.out.println(Arrays.toString(horiz));
+		}
+		System.out.print("Enter file name to save as: ");
+		sc.picture.save(in.nextLine());
 	}
 }
