@@ -141,37 +141,8 @@ public class SeamCarver {
 		}
 		this.picture = newPic;
 	}
-	
-	public static void main(String[] args) {
-		Scanner in = new Scanner(System.in);
-		SeamCarver sc = null;
-		while (true) {
-			System.out.println("Load picture: ");
-			String path = in.nextLine();
-			try {
-				sc = new SeamCarver(new Picture(path)); 
-				break;
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-				System.out.println("Unable to load picture, try again");
-			}
-		}
-		System.out.println("Current size of picture(WxH): " + sc.picture.width() + "x" + sc.picture.height());
-		System.out.print("Enter new width of picture: ");
-		int width = Integer.parseInt(in.nextLine());// no error checking here add later
-		System.out.print("Enter new height of picture: ");
-		int height = Integer.parseInt(in.nextLine());
-		while (sc.picture.width() > width) {
-			int[] vert = sc.findVerticalSeam();
-			sc.removeVerticalSeam(vert);
-			System.out.println(Arrays.toString(vert));
-		}
-		while (sc.picture.height() > height) {
-			int[] horiz = sc.findHorizontalSeam();
-			sc.removeHorizontalSeam(horiz);
-			System.out.println(Arrays.toString(horiz));
-		}
-		System.out.print("Enter file name to save as: ");
-		sc.picture.save(in.nextLine());
+	public void savePicture(String fileName) {
+		picture.save(fileName);
 	}
+	
 }
