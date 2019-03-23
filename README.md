@@ -12,6 +12,28 @@ This part uses dynamic programming to create a accumulated cost matrix. It then 
 3. Remove path to decrease width (or height) by 1  
 Removes each pixel in the path from the image, shrinking the width or height by 1 pixel.  
 
+Example
+-------
+Original:    
+![original picture](SeamCarving/examples/original-pic1.jpg)
+Seam-carved:  
+![seam carved picture](SeamCarving/examples/carved-pic1.jpg)
+
+
+Running the Program   
+-------------------
+A typical user interaction with the program:    
+```
+Load picture: C:\xxx\original-pic1.jpg
+Current size of picture(WxH): 960x636
+Enter new width of picture: 500
+Enter new height of picture: 500
+Enter file name to save as: carved-pic1.jpg
+Done? (y/n): y
+Done
+```
+
+
 LINKS:   
 http://www.faculty.idc.ac.il/arik/SCWeb/imret/index.html   
 https://en.wikipedia.org/wiki/Seam_carving   
